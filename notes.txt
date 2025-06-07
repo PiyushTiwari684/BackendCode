@@ -1,0 +1,101 @@
+=> create a package .json file using npm init -y
+=> now create and initialise a repo on github 
+
+using commands 
+git init 
+git add.
+git commit 
+git remote add origin https://github.com/PiyushTiwari684/BackendCode.git
+git push -u origin main
+
+
+now if we create only empty folder and there is no file inside those folders then it will not get uploaded n github directly until it have a file for that we can create a .gitkeep(industry standard) to push those folder on github 
+create a gitignore file to not to upload the files which should not be uploaded 
+
+we have some git ignore generator
+https://mrkandreev.name/snippets/gitignore-generator/#Node
+
+To create multiple file directly from the terminal we can use 
+ni app.js, constants.js ........multiple files.....  -ItmeType file
+
+we have also made some changes in the package.json file like 
+we have changed the import style from commonjs method to modular imports
+and defined the start script also 
+
+As we came to far we can push this to github using following commands
+git add .
+git commit -m "message"
+git push 
+
+
+agar kuch na samajh aye to ye vedio prefe karna 
+(lec -7 )
+https://youtu.be/9B4CvtzXRpc?si=vp8eEQWLTSsTfeBh
+
+
+starting with database connection
+
+M-1) this is one method to connect to the database
+
+in this we use iife to connect 
+
+to handle error we use try catch block 
+
+try{
+    mongoose.connect(`${proceess.env.MONGO_URL} / ${DB_NAME}`) here we defined the name of database in a seperate file with a variable MONGO_URL
+
+    app.on("err",(err)=>{
+        console.log("err",err);
+        throw err;
+    });
+
+    app.listen(proceess.env.PORT,()=>{
+        console.log(`app listening at PORT ${proceess.env.PORT}`)
+    })
+
+}catch(err){
+    console.log("err", err);
+    throw err;
+}
+
+
+m-2) method 2 to connect to database
+
+using seperate file 
+
+
+
+now as we know that data can be send in different forms to handle that we need configure something like this
+we have to applu middleware for that 
+
+app.use(express.json({limit:"16kb})); // it helps the sever to understand the json data which is dent from client 
+app.use(express.urlencoded({extended:true,limit:"16kb})) // this deals with the form data 
+app.use(express.static("public")) // it deals with static file and help app to show static files like images html, css
+app.use(cookieParser()) // helps the server to perform crud operations on cookies
+
+
+
+###### Middleware #####
+
+it is like the checkpost between req response cycle these can multiple in numbers
+
+
+Note => database setup karte k=time do cheeje hamesha dhyaan rakhni chahiye 
+1) ki wo promise return karta he so use try catch 
+2) and use async await 
+
+
+### creating out first models for our project ###
+
+we have created 2 models till now 
+1) user model 
+2)vedio model 
+
+user model me maine ek new cheej revise kari 
+jo ki watchHistory ke type me and owner ke type me use ki he 
+
+that when we have we to define the type which is pointing to some other model for that 
+we have to use simply Schema.Types.Object_Id and ref to that model 
+
+also one more thing since we are going to use aggregation pipelines therefor we need an external 
+package to use them mongoose-aggregate-paginate-v2 
