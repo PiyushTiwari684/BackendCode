@@ -1,2 +1,109 @@
 utils ke andar jo asyncHandler function ka syntax confuse kar raha he 
 
+
+
+Refer tutorial num-7 for github 
+And also for the terminal command
+
+After installing the project setup the package.json file
+
+s-1) we will set the type of importing as we know that in js importing is done in two ways using common js and using modules, so for that we set the type 
+in package.json file 
+
+type = "module"
+
+and also set the command for server starting command 
+
+Q) What is difference between dependencies and devdependencies ??
+
+Dev dependencies are the dependencies jinko ham development ke time use karte he production 
+ke time nahi le jate he isse koi file size se problem nahi hoti 
+
+we will use git bash for directly creating folders from terminal and will setup the mvc forlder structure
+
+we need some folder in starting
+controller, db, middleware, routes, models, utils
+
+## Use Prettier aslo in our project it will help in maintaining consistency through out the project 
+install using npm i -D prettier
+And also we need to create a file in our project telling the prettier what it have to do(filename - .prettierrc)
+in this we set command like this 
+
+{
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "semi": true,
+  "trailingComma": "all"
+}
+
+And also we have to create one more file in which we will tell the prettier that which files it should not touch 
+
+What it will do ??
+
+It is a code formatter , it enforces a consistent style by persing your code and re-printing it with its own rules that take the maximum line length into account,
+wrapping the code when neccessary 
+
+
+## steps to connect to the database 
+
+s-1) go to mongodb atlas 
+s-2)  create new project and name the project 
+
+mongodb+srv://pranjalpant7:Pranjal1234@cluster0.bgjx45h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+After setting the clouster and creating database user go to network access
+Add ip address since we are building for own pc so we can use allow acces from anywhere 
+
+NOw connect to any one like driver there you will get an url use that url in .env file 
+
+
+s-3) now to setup the database connection we need to install some packages 
+mongoose, dotenv 
+
+this is method-1 of writing the database connection function
+
+function connectDB(){
+
+}
+connectDB();
+but we can improve this function by creating the this function as iife
+
+;(async()=>{})();
+
+generally in the company people start ot write the iife function starting with the semicolon
+Always use trycatch to while writing the db connection function since database is in the another continent
+
+m-1) this is one way of connecting to the database where we are writing the code in the index file only
+
+import mongoose from 'mongoose';
+import {DB_NAME} from './constants.js';
+
+import express from 'express';
+
+const app = express();
+
+
+// function connectDB(){
+
+// }
+// connectDB();
+
+(async()=>{
+    try {
+        mongoose.connect(`${process.env.MONGO_URL}/${DB_NAME}`)
+        app.on("error",(err)=>{
+            console.log("Error while talking to the database",err)
+            throw err;
+        }); // kabhi kabhi kya hota he ki database to connect ho jata he but hamara server db se baat nahi kar pata to profession ham ye lines of code bhi add karte he 
+
+        app.listen(process.env.PORT,()=>{
+            console.log(`server listening at port ${process.env.PORT}`)
+        })
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+})();
+
+// we have use iife here to connect to the db and so that the code didn't get polluted
+// but due to this our index file get polluted 

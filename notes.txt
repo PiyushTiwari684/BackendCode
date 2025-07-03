@@ -9,7 +9,7 @@ git remote add origin https://github.com/PiyushTiwari684/BackendCode.git
 git push -u origin main
 
 
-now if we create only empty folder and there is no file inside those folders then it will not get uploaded n github directly until it have a file for that we can create a .gitkeep(industry standard) to push those folder on github 
+now if we create only empty folder and there is no file inside those folders then it will not get uploaded directly on github until it have a file for that we can create a .gitkeep(industry standard) to push those folder on github 
 create a gitignore file to not to upload the files which should not be uploaded 
 
 we have some git ignore generator
@@ -37,12 +37,12 @@ starting with database connection
 
 M-1) this is one method to connect to the database
 
-in this we use iife to connect 
+in this we use iife(immediately invoked function expression) to connect 
 
 to handle error we use try catch block 
 
 try{
-    mongoose.connect(`${proceess.env.MONGO_URL} / ${DB_NAME}`) here we defined the name of database in a seperate file with a variable MONGO_URL
+    mongoose.connect(`${proceess.env.MONGO_URL} / ${DB_NAME}`) here we defined the name of database in a seperate file with a variable DB_NAME
 
     app.on("err",(err)=>{
         console.log("err",err);
@@ -66,9 +66,10 @@ using seperate file
 
 
 now as we know that data can be send in different forms to handle that we need configure something like this
-we have to applu middleware for that 
+we have to use middlewares for that  there can be different different middlewares for handling different different file types 
 
-app.use(express.json({limit:"16kb})); // it helps the sever to understand the json data which is dent from client 
+
+app.use(express.json({limit:"16kb})); // it helps the sever to understand the json data which is sent from client 
 app.use(express.urlencoded({extended:true,limit:"16kb})) // this deals with the form data 
 app.use(express.static("public")) // it deals with static file and help app to show static files like images html, css
 app.use(cookieParser()) // helps the server to perform crud operations on cookies
@@ -80,16 +81,16 @@ app.use(cookieParser()) // helps the server to perform crud operations on cookie
 it is like the checkpost between req response cycle these can multiple in numbers
 
 
-Note => database setup karte k=time do cheeje hamesha dhyaan rakhni chahiye 
+Note => database setup karte time do cheeje hamesha dhyaan rakhni chahiye 
 1) ki wo promise return karta he so use try catch 
-2) and use async await 
+2) and use async await  since it is in the another continent 
 
 
 ### creating out first models for our project ###
 
 we have created 2 models till now 
 1) user model 
-2)vedio model 
+2) vedio model 
 
 user model me maine ek new cheej revise kari 
 jo ki watchHistory ke type me and owner ke type me use ki he 
@@ -99,3 +100,63 @@ we have to use simply Schema.Types.Object_Id and ref to that model
 
 also one more thing since we are going to use aggregation pipelines therefor we need an external 
 package to use them mongoose-aggregate-paginate-v2 
+
+
+// lec-12 http crash course 
+
+http => hyper text transfer protocols
+url=> uniform resource locator 
+uri => uniform resource identifier 
+urn =>uniform resource name 
+
+What are headers ??
+
+jab bhi ham kuch bhejta he to uske saath me kuch information ati he 
+that we call as meta data and these are also called as the headers 
+
+And this metadata is in the form of key value pairs that are set with request and response
+
+## Categories of headers 
+
+Request headers => From Client
+response header  => fro server 
+representation headers => encoding/compression
+payload headers => data
+
+
+### Http methods 
+
+Basic set of operations that can be used to interact with server 
+
+GET => Retrives a resource 
+HEAD => NO message body (response headers only)
+Options => what operations are available 
+Trace => loppback test(get same data)(used in case of debugging)
+Delete => remove a resource 
+Put => replace a resource
+post=> interact with the resources 
+patch => change part of resources(update the perticular resource) 
+
+
+
+## Http status codes
+
+1xx => informational
+2xx => Success
+3xx => Redirection
+4xx => client error
+5xx => server error 
+
+100 => continue
+102 => Processing
+200 => Ok
+201 => created
+202 => accepted
+307 => temporarily Redirect
+308 => permanent resirect 
+400 => bad request 
+401 => unauthorized
+402 => Payment required
+404 => NOt found 
+500 => internal server error 
+504 => gateway time out 
