@@ -160,3 +160,120 @@ patch => change part of resources(update the perticular resource)
 404 => NOt found 
 500 => internal server error 
 504 => gateway time out 
+
+
+############ Writing our controllers ###########
+
+so as we know that first of there will be a controller function for registering the user 
+
+for registering the user we are required to have some of the fields like username email password and fullName this all depends on the frontend part that what are the fields we taking there in the register form 
+
+so we will get these fields from the req.body
+
+const {userName,email, fullName, password} = req.body
+
+after destructuring we need to check that  is there field that is required are empty ??
+
+if([userName, email, password, fullName]).some((field) =>field.trim() === "") throw new ApiError(400,"message");
+
+if all the required data is present and valid then we will check that, is there any user with the email or useName already present in database if it exists then we will send the error with the status code 
+
+const existingUser = await User.findOne({$or:[{email},{userName}]});
+
+if(existingUser) throw new ApiError(409,"message");
+
+Now we have completed all the possible check for the jsondata but now we need to check about the required files 
+like Avatar 
+
+For checking these files we need to know about the multer and cloudinary 
+Multer is a middleware that gives us the access of the files and add file in the req object throught which we can access the file that are being send by the User
+
+Multer adds a body object and a file or files object to the request object. The body object contains the values of the text fields of the form, the file or files object contains the files uploaded via the form.
+
+multer setup
+
+in multer we have to create a storage 
+
+import multer from "multer";
+
+const storage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,"./public/temp")
+    },
+    fileName:function(req,file,cb){
+        cb(null,filname)
+    }
+})
+
+export const upload = multer({storage});
+
+this multer will give the access to req.file where we will get the files
+
+now to check the file is present or not we will access the file path from req.file
+
+const avatarLocalPath = req.files?.avatar[0]?.path;
+
+
+log while req.files [Object: null prototype] {
+  avatar: [
+    {
+      fieldname: 'avatar',
+      originalname: 'Screenshot 2025-07-06 161734.png',
+      encoding: '7bit',
+      mimetype: 'image/png',
+      destination: './public/temp',
+      filename: 'Screenshot 2025-07-06 161734.png',
+      path: 'public\\temp\\Screenshot 2025-07-06 161734.png',
+      size: 73524
+    }
+  ],
+  coverImage: [
+    {
+      fieldname: 'coverImage',
+      originalname: 'Screenshot 2025-07-06 161715.png',
+      encoding: '7bit',
+      mimetype: 'image/png',
+      destination: './public/temp',
+      filename: 'Screenshot 2025-07-06 161715.png',
+      path: 'public\\temp\\Screenshot 2025-07-06 161715.png',
+      size: 63401
+    }
+  ]
+}
+log while avatar {
+  asset_id: '41960eeb1279cfd2fc9dbf1c5e39f6ad',
+  public_id: 'bpzecfclliusmvp5d0yc',
+  version: 1751916843,
+  version_id: '18cba81161a6c20cfcd8d683219e5256',
+  signature: '80ed2c3597f9289587f50ca7c8fb57523cdb360f',
+  width: 1004,
+  height: 476,
+  format: 'png',
+  resource_type: 'image',
+  created_at: '2025-07-07T19:34:03Z',
+  tags: [],
+  bytes: 73524,
+  type: 'upload',
+  etag: 'f335fbc310cdde46cdec19a3c888b3b1',
+  placeholder: false,
+  url: 'http://res.cloudinary.com/dis4o2wq9/image/upload/v1751916843/bpzecfclliusmvp5d0yc.png',
+  secure_url: 'https://res.cloudinary.com/dis4o2wq9/image/upload/v1751916843/bpzecfclliusmvp5d0yc.png',
+  asset_folder: '',
+  display_name: 'bpzecfclliusmvp5d0yc',
+  original_filename: 'Screenshot 2025-07-06 161734',
+  api_key: '871974533835248'
+}
+log while printing user {
+  userName: 'yashraj',
+  email: 'yashraj@gmail.com',
+  fullName: 'Yashraj Tiwari',
+  avatar: 'http://res.cloudinary.com/dis4o2wq9/image/upload/v1751916843/bpzecfclliusmvp5d0yc.png',
+  coverImage: 'http://res.cloudinary.com/dis4o2wq9/image/upload/v1751916845/hhz1odrwu9kj77fqi8zd.png',
+  wathchHistory: [],
+  password: '$2b$10$NvxFvTQwgxewVRpNcUSF5.kUZRA1jGlhtoK/LSz9cSJTPAL99ykhu',
+  _id: new ObjectId('686c212d9afb99af26cb1a4c'),
+  createdAt: 2025-07-07T19:34:05.950Z,
+  updatedAt: 2025-07-07T19:34:05.950Z,
+  __v: 0
+}
+
