@@ -277,3 +277,9 @@ log while printing user {
   __v: 0
 }
 
+
+## WHy these accesstoken and refreshtoken bothe are used 
+
+accessToken is generally shortlived which helps the user to stay logged in for a short periiod of time
+where as Refreshtoken is long lived and is used to refresh the accesstoke when it get expired 
+
